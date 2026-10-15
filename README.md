@@ -1,5 +1,9 @@
 # Emotion Detection
 
+## 🌐 Live Demo
+
+Try the deployed application here: [Emotion Detection Web App](https://emotion-detection-system-dkuixb8c2o3ea5umiwszjv.streamlit.app/)
+
 A machine-learning web application that predicts the dominant emotion
 expressed in English text. The interface is built with Streamlit, and
 the classifier uses TF-IDF features with Logistic Regression.
@@ -26,7 +30,7 @@ the classifier uses TF-IDF features with Logistic Regression.
 ## Project Structure
 
 ``` text
-emotion-detection-system/
+Emotion-Detection/
 ├── app.py
 ├── logistic_model.pkl
 ├── tfidf_vectorizer.pkl
