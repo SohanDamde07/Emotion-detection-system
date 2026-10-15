@@ -26,14 +26,14 @@ the classifier uses TF-IDF features with Logistic Regression.
 ## Project Structure
 
 ``` text
-Emotion-Detection/
+emotion-detection-system/
 ├── app.py
 ├── logistic_model.pkl
 ├── tfidf_vectorizer.pkl
 ├── emotion_label_mapping.json
 ├── requirements.txt
 ├── train.txt
-├── Sentimental_Analysis_Improved.ipynb
+├── Emotion_analysis.ipynb
 └── assets/
     ├── joy.png
     ├── sadness.png
@@ -99,7 +99,7 @@ browser.
 
 ## Training and Evaluation
 
-Use `Sentimental_Analysis_Improved.ipynb` and the training dataset
+Use `Emotion_analysis.ipynb` and the training dataset
 (`train.txt`) to train and evaluate the classifier. Review the
 classification report, including precision, recall, and F1-score for
 each emotion, and the macro F1-score.
