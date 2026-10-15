@@ -183,6 +183,35 @@ def load_artifacts():
         )
     return model, vectorizer, label_map
 
+@st.cache_resource
+def load_english_stopwords():
+    """
+    Load NLTK English stopwords. On hosted deployments (such as Streamlit
+    Community Cloud), download the corpus automatically if it is not present.
+    """
+    try:
+        import nltk
+        from nltk.corpus import stopwords
+
+        try:
+            words = stopwords.words("english")
+        except LookupError:
+            # The Python package can be installed while the NLTK corpus itself
+            # is missing from the deployment environment.
+            downloaded = nltk.download("stopwords", quiet=True)
+            if not downloaded:
+                raise RuntimeError("NLTK could not download the English stopwords corpus.")
+            words = stopwords.words("english")
+
+        return set(words)
+    except Exception as exc:
+        raise RuntimeError(
+            "NLTK English stopwords are unavailable. Confirm `nltk` is listed "
+            "in requirements.txt and redeploy. If the download is blocked, add "
+            "the NLTK stopwords corpus to the deployment environment."
+        ) from exc
+
+
 def clean_text(text):
     """
     Match the notebook's preprocessing order:
@@ -193,24 +222,10 @@ def clean_text(text):
 
     text = text.lower()
     text = text.translate(str.maketrans("", "", string.punctuation))
+    text = "".join(char for char in text if not char.isdigit())
+    text = "".join(char for char in text if char.isascii())
 
-    cleaned = ""
-    for char in text:
-        if not char.isdigit():
-            cleaned += char
-
-    text = "".join(char for char in cleaned if char.isascii())
-
-    try:
-        from nltk.corpus import stopwords
-        stop_words = set(stopwords.words("english"))
-    except (ImportError, LookupError) as exc:
-        raise RuntimeError(
-            "This model was trained with NLTK English stopwords. "
-            "Install NLTK and run `python -m nltk.downloader stopwords` "
-            "so the app uses the same preprocessing as the notebook."
-        ) from exc
-
+    stop_words = load_english_stopwords()
     tokens = [word for word in text.split() if word not in stop_words]
     return " ".join(tokens)
 
